@@ -1,5 +1,6 @@
 'use client'
 
+import React from "react"
 import { ChangeEventHandler, FormEvent, useState } from "react"
 
 type AsientoForm = {
@@ -10,9 +11,9 @@ type AsientoForm = {
 }
 
 type Registro = {
-  cuenta: '',
-  debe: '',
-  haber: '',
+  cuenta: string,
+  debe: number | '',
+  haber: number | '',
 }
 
 export default function Home() {
@@ -29,7 +30,6 @@ export default function Home() {
 
   const [formulario, setFormulario] = useState(formularioInicial)
   const [tabla, setTabla] = useState<AsientoForm[]>([])
-  const [agregarFila, setAgregarFila] = useState<boolean>(false)
 
   const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -45,6 +45,31 @@ export default function Home() {
     })
   }
 
+  const handleChangeRegistro: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { name, value } = e.target;
+    const [campo, indexStr] = name.split(/(\d+)/).filter(Boolean);
+    const index = parseInt(indexStr, 10) - 1;
+
+    setFormulario((prev) => {
+      const nuevosRegistros = [...prev.registros]
+      nuevosRegistros[index] = {
+        ...nuevosRegistros[index],
+        [campo]: value
+      }
+      return {
+        ...prev,
+        registros: nuevosRegistros
+      }
+    })
+  }
+
+  const agregarFila = () => {
+    setFormulario((prev) => ({
+      ...prev,
+      registros: [...prev.registros, { cuenta: '', debe: '', haber: '' }]
+    }))
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24 gap-8">
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
@@ -52,51 +77,34 @@ export default function Home() {
           <div className="flex">
             <label className="flex flex-col">
               Fecha
-              <input name="fecha" type='date' value={formulario.fecha} onChange={handleChange} className="text-black" />
+              <input name="fecha" type='date' value={formulario.fecha} onChange={handleChange} required className="text-black" />
             </label>
             <label className="flex flex-col">
               Nº de Asiento
-              <input name="id" type='number' disabled value={formulario.id} onChange={handleChange} className="text-black"  />
+              <input name="id" type='number' disabled value={formulario.id} onChange={handleChange} required className="text-black"  />
             </label>
             <label className="flex flex-col">
               Detalle
-              <input name="detalle" type='string' value={formulario.detalle} onChange={handleChange} className="text-black"  />
+              <input name="detalle" type='string' value={formulario.detalle} onChange={handleChange} required className="text-black"  />
             </label>
-            <label className="flex flex-col">
-              Cuenta
-              <input name="cuenta" type='string' value={formulario.registros[0].cuenta} onChange={handleChange} className="text-black" />
-            </label>
-            <label className="flex flex-col">
-              Debe
-              <input name="debe" type='number' value={formulario.registros[0].debe} onChange={handleChange} className="text-black" />
-            </label>
-            <label className="flex flex-col">
-              Haber
-              <input name="haber" type='number' value={formulario.registros[0].haber} onChange={handleChange} className="text-black" />
-            </label>
+            <div className="flex flex-col gap-4">
+              {formulario.registros.map((reg, index) =>
+                  <div key={index} className="flex">
+                    <input name={`cuenta${index + 1}`} type='string' value={reg.cuenta} onChange={(e) => handleChangeRegistro(e)} id="cuentaInput" required className="text-black" placeholder="Cuenta" />
+                    <input name={`debe${index + 1}`} type='number' value={reg.debe} onChange={(e) => handleChangeRegistro(e)} id="debeInput" className="text-black" placeholder="Debe" />
+                    <input name={`haber${index + 1}`} type='number' value={reg.haber} onChange={(e) => handleChangeRegistro(e)} id="haberInput" className="text-black" placeholder="Haber" />
+                  </div>
+              )}
+            </div>
+
+
           </div>
         </div>
         <div className="flex gap-4">
-          <button onClick={() => setAgregarFila(true)} type="button" className="bg-stone-900">++</button>
+          <button onClick={() => agregarFila()} type="button" className="bg-stone-900">++</button>
           <button type="submit" className="bg-stone-900">Registrar</button>
         </div>
       </form>
-      {agregarFila && 
-      <form className="flex self-end">
-          <label className="flex flex-col">
-            Cuenta
-            <input name="cuenta2" type='string' value={formulario.cuenta2} onChange={handleChange} className="text-black" />
-          </label>
-          <label className="flex flex-col">
-            Debe
-            <input name="debe2" type='number' value={formulario.debe2} onChange={handleChange} className="text-black" />
-          </label>
-          <label className="flex flex-col">
-            Haber
-            <input name="haber2" type='number' value={formulario.haber2} onChange={handleChange} className="text-black" />
-          </label>
-      </form>
-      }
 
       <div className="flex w-full justify-center">
         <table className="w-full">
@@ -119,22 +127,16 @@ export default function Home() {
                     <td>{e.id}</td>
                     <td>{e.detalle}</td>
                   </tr>
-                  <tr className="text-white">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{e.cuenta}</td>
-                    <td>{e.debe}</td>
-                    <td>{e.haber}</td>
-                  </tr>
-                  <tr className="text-white">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{e.cuenta2}</td>
-                    <td>{e.debe2}</td>
-                    <td>{e.haber2}</td>
-                  </tr>
+                    {e.registros.map(e => (
+                      <tr className="text-white">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{e.cuenta}</td>
+                        <td>{e.debe}</td>
+                        <td>{e.haber}</td>
+                      </tr>
+                    ))}
               </> 
               )
             }
