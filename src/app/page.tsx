@@ -1,74 +1,11 @@
 'use client'
 
-import React from "react"
-import { ChangeEventHandler, FormEvent, useState } from "react"
-
-type AsientoForm = {
-  fecha: string,
-  id: number,
-  detalle: string,
-  registros: Registro[]
-}
-
-type Registro = {
-  cuenta: string,
-  debe: number | '',
-  haber: number | '',
-}
+import Tabla from "./components/Tabla";
+import useAsientoForm from "./forms/useAsientoForm";
 
 export default function Home() {
-  const formularioInicial: AsientoForm = {
-    fecha: '',
-    id: 0,
-    detalle: '',
-    registros: [{
-      cuenta: '',
-      debe: '',
-      haber: '',
-    }],
-  }
 
-  const [formulario, setFormulario] = useState(formularioInicial)
-  const [tabla, setTabla] = useState<AsientoForm[]>([])
-
-  const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const nuevaTabla = [...tabla, formulario]
-    setTabla(nuevaTabla)
-    setFormulario(formularioInicial)
-  }
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setFormulario({
-      ...formulario,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleChangeRegistro: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { name, value } = e.target;
-    const [campo, indexStr] = name.split(/(\d+)/).filter(Boolean);
-    const index = parseInt(indexStr, 10) - 1;
-
-    setFormulario((prev) => {
-      const nuevosRegistros = [...prev.registros]
-      nuevosRegistros[index] = {
-        ...nuevosRegistros[index],
-        [campo]: value
-      }
-      return {
-        ...prev,
-        registros: nuevosRegistros
-      }
-    })
-  }
-
-  const agregarFila = () => {
-    setFormulario((prev) => ({
-      ...prev,
-      registros: [...prev.registros, { cuenta: '', debe: '', haber: '' }]
-    }))
-  }
+  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla] = useAsientoForm()
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24 gap-8">
@@ -96,8 +33,6 @@ export default function Home() {
                   </div>
               )}
             </div>
-
-
           </div>
         </div>
         <div className="flex gap-4">
@@ -107,41 +42,7 @@ export default function Home() {
       </form>
 
       <div className="flex w-full justify-center">
-        <table className="w-full">
-          <thead>
-            <tr>
-              <td>Fecha</td>
-              <td>Nº de Asiento</td>
-              <td>Detalle</td>
-              <td>Cuenta</td>
-              <td>Debe</td>
-              <td>Haber</td>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              tabla.map(e => 
-                <>
-                  <tr className="text-white">
-                    <td>{e.fecha}</td>
-                    <td>{e.id}</td>
-                    <td>{e.detalle}</td>
-                  </tr>
-                    {e.registros.map(e => (
-                      <tr className="text-white">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{e.cuenta}</td>
-                        <td>{e.debe}</td>
-                        <td>{e.haber}</td>
-                      </tr>
-                    ))}
-              </> 
-              )
-            }
-          </tbody>
-        </table>
+        <Tabla tabla={tabla}/>
         <button>Ed</button>
       </div>
       <button>Nuevo Asiento</button>
