@@ -1,14 +1,15 @@
 'use client'
 
+import { useState } from "react";
 import Tabla from "./components/Tabla";
 import useAsientoForm from "./forms/useAsientoForm";
 
 export default function Home() {
+  
+  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, modal, nuevoAsiento] = useAsientoForm()
 
-  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla] = useAsientoForm()
-
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-24 gap-8">
+  const FormComponent = () => {
+    return(
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <div className="flex flex-col">
           <div className="flex">
@@ -26,11 +27,11 @@ export default function Home() {
             </label>
             <div className="flex flex-col gap-4">
               {formulario.registros.map((reg, index) =>
-                  <div key={index} className="flex">
-                    <input name={`cuenta${index + 1}`} type='string' value={reg.cuenta} onChange={(e) => handleChangeRegistro(e)} id="cuentaInput" required className="text-black" placeholder="Cuenta" />
-                    <input name={`debe${index + 1}`} type='number' value={reg.debe} onChange={(e) => handleChangeRegistro(e)} id="debeInput" className="text-black" placeholder="Debe" />
-                    <input name={`haber${index + 1}`} type='number' value={reg.haber} onChange={(e) => handleChangeRegistro(e)} id="haberInput" className="text-black" placeholder="Haber" />
-                  </div>
+                <div key={index} className="flex">
+                  <input name={`cuenta${index + 1}`} type='string' value={reg.cuenta} onChange={(e) => handleChangeRegistro(e)} id="cuentaInput" required className="text-black" placeholder="Cuenta" />
+                  <input name={`debe${index + 1}`} type='number' value={reg.debe} onChange={(e) => handleChangeRegistro(e)} id="debeInput" className="text-black" placeholder="Debe" />
+                  <input name={`haber${index + 1}`} type='number' value={reg.haber} onChange={(e) => handleChangeRegistro(e)} id="haberInput" className="text-black" placeholder="Haber" />
+                </div>
               )}
             </div>
           </div>
@@ -40,12 +41,19 @@ export default function Home() {
           <button type="submit" className="bg-stone-900">Registrar</button>
         </div>
       </form>
+    )
+  }
 
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-start p-24 gap-8">
+      {modal &&
+        <FormComponent />
+      }
       <div className="flex w-full justify-center">
         <Tabla tabla={tabla}/>
         <button>Ed</button>
       </div>
-      <button>Nuevo Asiento</button>
+      <button onClick={() => nuevoAsiento()}>Nuevo Asiento</button>
     </main>
   );
 }
