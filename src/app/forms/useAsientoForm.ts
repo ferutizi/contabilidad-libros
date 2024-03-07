@@ -28,7 +28,7 @@ export default function useAsientoForm() {
 
   const [formulario, setFormulario] = useState(formularioInicial)
   const [tabla, setTabla] = useState<AsientoForm[]>([])
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState<boolean>(false)
 
   const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

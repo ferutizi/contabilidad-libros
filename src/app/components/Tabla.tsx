@@ -6,7 +6,7 @@ interface TablaProps {
 
 export default function tabla({tabla}: TablaProps ) {
   return(
-    <table className="w-full">
+    <table className="w-full border">
     <thead>
       <tr>
         <td>Fecha</td>
