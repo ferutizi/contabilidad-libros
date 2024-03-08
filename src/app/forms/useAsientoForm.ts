@@ -28,14 +28,12 @@ export default function useAsientoForm() {
 
   const [formulario, setFormulario] = useState(formularioInicial)
   const [tabla, setTabla] = useState<AsientoForm[]>([])
-  const [modal, setModal] = useState<boolean>(false)
 
   const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const nuevaTabla = [...tabla, formulario]
     setTabla(nuevaTabla)
     setFormulario(formularioInicial)
-    setModal(false)
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -70,9 +68,5 @@ export default function useAsientoForm() {
     }))
   }
 
-  const nuevoAsiento = () => {
-    setModal(true)
-  }
-
-  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, modal, nuevoAsiento] as const
+  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla] as const
 }
