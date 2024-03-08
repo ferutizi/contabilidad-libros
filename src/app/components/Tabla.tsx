@@ -39,8 +39,8 @@ export default function tabla({tabla}: TablaProps ) {
                   <TableCell className="font-medium"></TableCell>
                   <TableCell></TableCell>
                   <TableCell>{e.cuenta}</TableCell>
-                  <TableCell className="text-right">$ {e.debe}</TableCell>
-                  <TableCell className="text-right">$ {e.haber}</TableCell>
+                  <TableCell className="text-right">{(e.debe as number) > 0  ? '$ ' + e.debe : '-'}</TableCell>
+                  <TableCell className="text-right">{(e.haber as number) > 0  ? '$ ' + e.haber : '-'}</TableCell>
                   <TableCell className="flex items-center justify-end space-x-2">
                     <Button>Edit</Button>
                     <Button>Delete</Button>
