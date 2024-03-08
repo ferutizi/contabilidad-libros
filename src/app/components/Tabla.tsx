@@ -15,9 +15,9 @@ export default function tabla({tabla}: TablaProps ) {
           <TableHead className="w-[120px]">Nro. Asiento</TableHead>
           <TableHead>Detalle</TableHead>
           <TableHead>Cuenta</TableHead>
-          <TableHead className="text-right">Debe</TableHead>
-          <TableHead className="text-right">Haber</TableHead>
-          <TableHead>Accion</TableHead>
+          <TableHead className="text-center">Debe</TableHead>
+          <TableHead className="text-center">Haber</TableHead>
+          <TableHead className="text-right">Accion</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -35,8 +35,8 @@ export default function tabla({tabla}: TablaProps ) {
               </TableRow>
               {e.registros.map(e => (
                 <TableRow>
-                  <TableCell className="font-medium"></TableCell>
-                  <TableCell className="font-medium"></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
                   <TableCell></TableCell>
                   <TableCell>{e.cuenta}</TableCell>
                   <TableCell className="text-right">{(e.debe as number) > 0  ? '$ ' + e.debe : '-'}</TableCell>

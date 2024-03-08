@@ -15,9 +15,11 @@ type Registro = {
 }
 
 export default function useAsientoForm() {
+  const [id, setId] = useState<number>(1)
+
   const formularioInicial: AsientoForm = {
     fecha: '',
-    id: 0,
+    id,
     detalle: '',
     registros: [{
       cuenta: '',
@@ -25,12 +27,13 @@ export default function useAsientoForm() {
       haber: '',
     }],
   }
-
+  
   const [formulario, setFormulario] = useState(formularioInicial)
   const [tabla, setTabla] = useState<AsientoForm[]>([])
 
   const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setId(prevId => prevId + 1)
     const nuevaTabla = [...tabla, formulario]
     setTabla(nuevaTabla)
     setFormulario(formularioInicial)
