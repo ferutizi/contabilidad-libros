@@ -8,7 +8,7 @@ import useModal from "./forms/useModal";
 
 export default function Home() {
   
-  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, totalDebe, totalHaber] = useAsientoForm()
+  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, totalSaldos] = useAsientoForm()
   const [modal, mostrarModal, ocultarModal] = useModal()
 
   return (
@@ -41,7 +41,7 @@ export default function Home() {
         <button onClick={modal ? ocultarModal : mostrarModal} className="text-stone-600">{modal ? 'ocultar ↑' : 'nuevo registro ↓' }</button>
         <hr className="w-screen"></hr>
       </header>
-      <Tabla tabla={tabla} totalDebe={totalDebe} totalHaber={totalHaber} />
+      <Tabla tabla={tabla} totalSaldos={totalSaldos} />
     </main>
   );
 }

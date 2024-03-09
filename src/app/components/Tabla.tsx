@@ -1,14 +1,13 @@
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { AsientoForm } from "../forms/useAsientoForm"
+import { AsientoForm, Saldos } from "../forms/useAsientoForm"
 
 interface TablaProps {
-  tabla: AsientoForm[]
-  totalDebe: number,
-  totalHaber: number, 
+  tabla: AsientoForm[],
+  totalSaldos: Saldos,
 }
 
-export default function tabla({tabla, totalDebe, totalHaber }: TablaProps ) {
+export default function tabla({tabla, totalSaldos }: TablaProps ) {
   return(
     <Table>
       <TableHeader>
@@ -57,8 +56,8 @@ export default function tabla({tabla, totalDebe, totalHaber }: TablaProps ) {
           <TableCell className="w-[120px] col-span-1"></TableCell>
           <TableCell className="col-span-2 font-bold">Transporte</TableCell>
           <TableCell className="col-span-2"></TableCell>
-          <TableCell className="col-span-2 font-bold text-right">$ {totalDebe}</TableCell>
-          <TableCell className="col-span-2 font-bold text-right">$ {totalHaber}</TableCell>
+          <TableCell className="col-span-2 font-bold text-right">$ {totalSaldos.debe}</TableCell>
+          <TableCell className="col-span-2 font-bold text-right">$ {totalSaldos.haber}</TableCell>
           <TableCell className="col-span-2"></TableCell>
         </TableRow>
       </TableBody>

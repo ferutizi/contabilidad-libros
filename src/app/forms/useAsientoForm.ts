@@ -14,6 +14,11 @@ export type Registro = {
   haber: number,
 }
 
+export type Saldos = {
+  debe: number,
+  haber: number
+}
+
 export default function useAsientoForm() {
   const [id, setId] = useState<number>(1)
 
@@ -31,8 +36,7 @@ export default function useAsientoForm() {
   //ESTADOS
   const [formulario, setFormulario] = useState(formularioInicial)
   const [tabla, setTabla] = useState<AsientoForm[]>([])
-  const [totalDebe, setTotalDebe] = useState<number>(0)
-  const [totalHaber, setTotalHaber] = useState<number>(0)
+  const [totalSaldos, setTotalSaldos] = useState<Saldos>({debe: 0, haber: 0})
 
   const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -76,22 +80,24 @@ export default function useAsientoForm() {
 
 
   //TOTALES
+
+  const calcularTotal = (saldo: 'debe' | 'haber') => {
+    const saldos = tabla.flatMap(e =>
+      e.registros.map(i => Number(i[saldo]))
+    )
+    const total = saldos.reduce((e, acc) => e + acc, 0)
+    return total
+  }
   
   useEffect(() => {
-    const saldosDebe = tabla.flatMap(e =>
-      e.registros.map(i => Number(i.debe))
-    )
-    const totalDebe = saldosDebe.reduce((e, acc) => e + acc, 0)
-    setTotalDebe(totalDebe)
+    const totalDebe = calcularTotal('debe')
+    const totalHaber = calcularTotal('haber')
+    const nuevosSaldos = {
+      debe: totalDebe,
+      haber: totalHaber
+    }
+    setTotalSaldos(nuevosSaldos)
   }, [tabla])
 
-  useEffect(() => {
-    const saldosHaber = tabla.flatMap(e =>
-      e.registros.map(i => Number(i.haber))
-    )
-    const totalHaber = saldosHaber.reduce((e, acc) => e + acc, 0)
-    setTotalHaber(totalHaber)
-  }, [tabla])
-
-  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, totalDebe, totalHaber] as const
+  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, totalSaldos] as const
 }
