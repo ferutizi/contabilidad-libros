@@ -8,12 +8,12 @@ import useModal from "./forms/useModal";
 
 export default function Home() {
   
-  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla] = useAsientoForm()
+  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, totalDebe, totalHaber] = useAsientoForm()
   const [modal, mostrarModal, ocultarModal] = useModal()
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-16 pt-0 gap-8">
-      <header className={`flex flex-col items-center gap-4 ${modal && 'pt-16'} sticky top-0 z-10 shadow-lg bg-white`}>
+      <header className={`flex flex-col items-center gap-4 ${modal && 'pt-16'} sticky top-0 z-10 shadow-lg bg-white max-w-screen`}>
       {
       modal ?
         <form onSubmit={handleSubmit} className="gap-4 flex flex-col items-center">
@@ -26,8 +26,8 @@ export default function Home() {
             {formulario.registros.map((reg, index) =>
               <div key={index} className="grid grid-cols-6 gap-2">
                 <Input name={`cuenta${index + 1}`} type='string' value={reg.cuenta} onChange={(e) => handleChangeRegistro(e)} id="cuentaInput" required className="text-black col-span-2" placeholder="Cuenta" />
-                <Input name={`debe${index + 1}`} type='number' value={reg.debe} onChange={(e) => handleChangeRegistro(e)} id="debeInput" className="text-black col-span-2" placeholder="Debe" />
-                <Input name={`haber${index + 1}`} type='number' value={reg.haber} onChange={(e) => handleChangeRegistro(e)} id="haberInput" className="text-black col-span-2" placeholder="Haber" />
+                <Input name={`debe${index + 1}`} type='number' value={reg.debe === 0 ? '' : reg.debe} onChange={(e) => handleChangeRegistro(e)} id="debeInput" className="text-black col-span-2" placeholder="Debe" />
+                <Input name={`haber${index + 1}`} type='number' value={reg.haber === 0 ? '' : reg.haber} onChange={(e) => handleChangeRegistro(e)} id="haberInput" className="text-black col-span-2" placeholder="Haber" />
               </div>
             )}
           </div>
@@ -41,7 +41,7 @@ export default function Home() {
         <button onClick={modal ? ocultarModal : mostrarModal} className="text-stone-600">{modal ? 'ocultar ↑' : 'nuevo registro ↓' }</button>
         <hr className="w-screen"></hr>
       </header>
-      <Tabla tabla={tabla}/>
+      <Tabla tabla={tabla} totalDebe={totalDebe} totalHaber={totalHaber} />
     </main>
   );
 }

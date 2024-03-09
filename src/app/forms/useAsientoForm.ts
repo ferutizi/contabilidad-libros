@@ -1,5 +1,5 @@
 'use client'
-import { ChangeEventHandler, FormEvent, useState } from "react"
+import { ChangeEventHandler, FormEvent, useEffect, useState } from "react"
 
 export type AsientoForm = {
   fecha: string,
@@ -8,10 +8,10 @@ export type AsientoForm = {
   registros: Registro[]
 }
 
-type Registro = {
+export type Registro = {
   cuenta: string,
-  debe: number | '',
-  haber: number | '',
+  debe: number,
+  haber: number,
 }
 
 export default function useAsientoForm() {
@@ -23,13 +23,16 @@ export default function useAsientoForm() {
     detalle: '',
     registros: [{
       cuenta: '',
-      debe: '',
-      haber: '',
+      debe: 0,
+      haber: 0,
     }],
   }
   
+  //ESTADOS
   const [formulario, setFormulario] = useState(formularioInicial)
   const [tabla, setTabla] = useState<AsientoForm[]>([])
+  const [totalDebe, setTotalDebe] = useState<number>(0)
+  const [totalHaber, setTotalHaber] = useState<number>(0)
 
   const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -67,9 +70,28 @@ export default function useAsientoForm() {
   const agregarFila = () => {
     setFormulario((prev) => ({
       ...prev,
-      registros: [...prev.registros, { cuenta: '', debe: '', haber: '' }]
+      registros: [...prev.registros, { cuenta: '', debe: 0, haber: 0 }]
     }))
   }
 
-  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla] as const
+
+  //TOTALES
+  
+  useEffect(() => {
+    const saldosDebe = tabla.flatMap(e =>
+      e.registros.map(i => Number(i.debe))
+    )
+    const totalDebe = saldosDebe.reduce((e, acc) => e + acc, 0)
+    setTotalDebe(totalDebe)
+  }, [tabla])
+
+  useEffect(() => {
+    const saldosHaber = tabla.flatMap(e =>
+      e.registros.map(i => Number(i.haber))
+    )
+    const totalHaber = saldosHaber.reduce((e, acc) => e + acc, 0)
+    setTotalHaber(totalHaber)
+  }, [tabla])
+
+  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, totalDebe, totalHaber] as const
 }

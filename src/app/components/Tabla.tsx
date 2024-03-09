@@ -4,52 +4,63 @@ import { AsientoForm } from "../forms/useAsientoForm"
 
 interface TablaProps {
   tabla: AsientoForm[]
+  totalDebe: number,
+  totalHaber: number, 
 }
 
-export default function tabla({tabla}: TablaProps ) {
+export default function tabla({tabla, totalDebe, totalHaber }: TablaProps ) {
   return(
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-[120px]">Fecha</TableHead>
-          <TableHead className="w-[120px]">Nro. Asiento</TableHead>
-          <TableHead>Detalle</TableHead>
-          <TableHead>Cuenta</TableHead>
-          <TableHead className="text-center">Debe</TableHead>
-          <TableHead className="text-center">Haber</TableHead>
-          <TableHead className="text-right">Accion</TableHead>
+        <TableRow className="grid grid-cols-12">
+          <TableHead className="w-[120px] col-span-1">Fecha</TableHead>
+          <TableHead className="w-[120px] col-span-1">Nro. Asiento</TableHead>
+          <TableHead className=" col-span-2">Detalle</TableHead>
+          <TableHead className=" col-span-2">Cuenta</TableHead>
+          <TableHead className="text-center col-span-2">Debe</TableHead>
+          <TableHead className="text-center col-span-2">Haber</TableHead>
+          <TableHead className="text-right col-span-2">Accion</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {
-          tabla.map(e => 
-            <>
-              <TableRow className="bg-stone-100">
-                <TableCell className="font-medium">{e.fecha}</TableCell>
-                <TableCell className="font-medium">{e.id}</TableCell>
-                <TableCell>{e.detalle}</TableCell>
-                <TableCell></TableCell>
-                <TableCell className="text-right"></TableCell>
-                <TableCell className="text-right"></TableCell>
-                <TableCell className="flex items-center justify-end space-x-2"></TableCell>
+          tabla.map((e, i) => 
+            <div key={i}>
+              <TableRow  className="bg-stone-100 grid grid-cols-12">
+                <TableCell className="font-medium col-span-1">{e.fecha}</TableCell>
+                <TableCell className="font-medium col-span-1">{e.id}</TableCell>
+                <TableCell className="col-span-2">{e.detalle}</TableCell>
+                <TableCell className="col-span-2"></TableCell>
+                <TableCell className="text-right col-span-2"></TableCell>
+                <TableCell className="text-right col-span-2"></TableCell>
+                <TableCell className="flex items-center justify-end space-x-2 col-span-2"></TableCell>
               </TableRow>
-              {e.registros.map(e => (
-                <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell>{e.cuenta}</TableCell>
-                  <TableCell className="text-right">{(e.debe as number) > 0  ? '$ ' + e.debe : '-'}</TableCell>
-                  <TableCell className="text-right">{(e.haber as number) > 0  ? '$ ' + e.haber : '-'}</TableCell>
-                  <TableCell className="flex items-center justify-end space-x-2">
+              {e.registros.map((e, i) => (
+                <TableRow key={i} className="grid grid-cols-12">
+                  <TableCell className="col-span-1"></TableCell>
+                  <TableCell className="col-span-1"></TableCell>
+                  <TableCell className="col-span-2"></TableCell>
+                  <TableCell className="col-span-2">{e.cuenta}</TableCell>
+                  <TableCell className="text-right col-span-2">{(e.debe as number) > 0  ? '$ ' + e.debe : '-'}</TableCell>
+                  <TableCell className="text-right col-span-2">{(e.haber as number) > 0  ? '$ ' + e.haber : '-'}</TableCell>
+                  <TableCell className="flex items-center justify-end space-x-2 col-span-2">
                     <Button>Edit</Button>
                     <Button>Delete</Button>
                   </TableCell>
                 </TableRow>
               ))}
-            </> 
+            </div> 
           )
         }
+        <TableRow className="fixed bottom-0 right-0 left-0 bg-stone-100 grid grid-cols-12 px-16">
+          <TableCell className="w-[120px] col-span-1"></TableCell>
+          <TableCell className="w-[120px] col-span-1"></TableCell>
+          <TableCell className="col-span-2 font-bold">Transporte</TableCell>
+          <TableCell className="col-span-2"></TableCell>
+          <TableCell className="col-span-2 font-bold text-right">$ {totalDebe}</TableCell>
+          <TableCell className="col-span-2 font-bold text-right">$ {totalHaber}</TableCell>
+          <TableCell className="col-span-2"></TableCell>
+        </TableRow>
       </TableBody>
     </Table>
   )
