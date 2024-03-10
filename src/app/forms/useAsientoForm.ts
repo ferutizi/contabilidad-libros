@@ -40,11 +40,14 @@ export default function useAsientoForm() {
 
   const handleSubmit  = ( e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setId(prevId => prevId + 1)
     const nuevaTabla = [...tabla, formulario]
     setTabla(nuevaTabla)
     setFormulario(formularioInicial)
   }
+
+  useEffect(() => {
+    setId(id + 1)
+  }, [tabla])
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormulario({
