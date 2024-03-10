@@ -5,6 +5,7 @@ import useAsientoForm from "./forms/useAsientoForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import useModal from "./forms/useModal";
+import './globals.css'
 
 export default function Home() {
   
@@ -13,7 +14,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-16 pt-0 gap-8">
-      <header className={`flex flex-col items-center gap-4 ${modal && 'pt-16'} sticky top-0 z-10 shadow-lg bg-white max-w-screen`}>
+      <header className={`flex flex-col items-center ${modal && 'pt-16'} sticky top-0 z-10 shadow-lg bg-white max-w-screen  transition-all duration-200 contenedor-hover:bg-red-500`}>
       {
       modal ?
         <form onSubmit={handleSubmit} className="gap-4 flex flex-col items-center">
@@ -38,7 +39,12 @@ export default function Home() {
         </form>
       : <div></div>
     }
-        <button onClick={modal ? ocultarModal : mostrarModal} className="text-stone-600">{modal ? 'ocultar ↑' : 'nuevo registro ↓' }</button>
+        <button
+          onClick={modal ? ocultarModal : mostrarModal}
+          className={`text-stone-600 transition-all duration-200 p-4 ${modal ? 'hover:-translate-y-1 hover:font-semibold hover:pb-1 hover:pt-2' : 'hover:translate-y-1 hover:font-semibold hover:pt-8'}`}
+        >
+          {modal ? 'ocultar ↑' : 'nuevo registro ↓' }
+        </button>
         <hr className="w-screen"></hr>
       </header>
       <Tabla tabla={tabla} totalSaldos={totalSaldos} />
