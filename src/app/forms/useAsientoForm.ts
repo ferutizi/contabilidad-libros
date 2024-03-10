@@ -102,5 +102,5 @@ export default function useAsientoForm() {
     setTotalSaldos(nuevosSaldos)
   }, [tabla])
 
-  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, totalSaldos] as const
+  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, setTabla, totalSaldos] as const
 }
