@@ -1,7 +1,10 @@
 'use client'
+
 import { ChangeEventHandler, FormEvent, useEffect, useState } from "react"
+import { v4 as uuidv4 } from 'uuid'
 
 export type AsientoForm = {
+  rId: string,
   fecha: string,
   id: number,
   detalle: string,
@@ -9,6 +12,7 @@ export type AsientoForm = {
 }
 
 export type Registro = {
+  rId: string,
   cuenta: string,
   debe: number,
   haber: number,
@@ -22,11 +26,17 @@ export type Saldos = {
 export default function useAsientoForm() {
   const [id, setId] = useState<number>(1)
 
+  const generarId = (): string => {
+    return uuidv4()
+  }
+
   const formularioInicial: AsientoForm = {
+    rId: generarId(),
     fecha: '',
     id,
     detalle: '',
     registros: [{
+      rId: generarId(), 
       cuenta: '',
       debe: 0,
       haber: 0,
@@ -77,7 +87,16 @@ export default function useAsientoForm() {
   const agregarFila = () => {
     setFormulario((prev) => ({
       ...prev,
-      registros: [...prev.registros, { cuenta: '', debe: 0, haber: 0 }]
+      registros: [...prev.registros, { rId: generarId(), cuenta: '', debe: 0, haber: 0 }]
+    }))
+  }
+
+  const EliminarFila = (rId: Registro['rId']) => {
+    const fila = formulario.registros.find(e => e.rId === rId)
+    const nuevoForm = formulario.registros.filter(e => e !== fila)
+    setFormulario((prev) => ({
+      ...prev,
+      registros: nuevoForm
     }))
   }
 
@@ -102,5 +121,5 @@ export default function useAsientoForm() {
     setTotalSaldos(nuevosSaldos)
   }, [tabla])
 
-  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, setTabla, totalSaldos] as const
+  return[formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, EliminarFila, tabla, setTabla, totalSaldos] as const
 }

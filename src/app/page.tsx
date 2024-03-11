@@ -9,7 +9,7 @@ import './globals.css'
 
 export default function Home() {
   
-  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, tabla, setTabla, totalSaldos] = useAsientoForm()
+  const [formulario, handleChange, handleChangeRegistro, handleSubmit, agregarFila, eliminarFila, tabla, setTabla, totalSaldos] = useAsientoForm()
   const [modal, mostrarModal, ocultarModal] = useModal()
 
   return (
@@ -48,7 +48,7 @@ export default function Home() {
               />
             </div>
             {formulario.registros.map((reg, index) =>
-              <div key={index} className="grid grid-cols-6 gap-2">
+              <div key={index} className="w-full grid grid-cols-12 gap-2 relative">
                 <Input
                   name={`cuenta${index + 1}`}
                   type='string'
@@ -56,7 +56,7 @@ export default function Home() {
                   onChange={(e) => handleChangeRegistro(e)}
                   id="cuentaInput"
                   required
-                  className="text-black col-span-2"
+                  className="text-black col-span-4"
                   placeholder="Cuenta"
                 />
                 <Input
@@ -65,7 +65,7 @@ export default function Home() {
                   value={reg.debe === 0 ? '' : reg.debe}
                   onChange={(e) => handleChangeRegistro(e)}
                   id="debeInput"
-                  className="text-black col-span-2"
+                  className="text-black col-span-4"
                   placeholder="Debe"
                   min={0}
                 />
@@ -75,10 +75,17 @@ export default function Home() {
                   value={reg.haber === 0 ? '' : reg.haber}
                   onChange={(e) => handleChangeRegistro(e)}
                   id="haberInput"
-                  className="text-black col-span-2"
+                  className="text-black col-span-4"
                   placeholder="Haber"
                   min={0}
-                />
+                />{index !== 0 && 
+                  <Button
+                    type="button"
+                    onClick={() => eliminarFila(reg.rId)}
+                    className="w-min absolute transition-all duration-200 bg-white text-black border border-stone-200 hover:border-black hover:bg-white -right-14 col-span-1"
+                  >D
+                  </Button>
+                }
               </div>
             )}
           </div>
