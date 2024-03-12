@@ -1,19 +1,15 @@
 # Contabilidad Libros
 
 Aplicación para registros de libros contables. Libro diario, mayor, comprobacion de sumas y saldos. 
-Podés utilizarla [ACA](https://easy-pomodoro-one.vercel.app/)
 
 ## Tecnologías utilizadas
 
 - Next.js
 - TypeScript
 - Tailwind CSS
+- shadcn/ui
 
 ## Funcionalidades
-
-- [ ] 
-- [ ] 
-- [ ] 
 
 ## Configuracion inicial
 
