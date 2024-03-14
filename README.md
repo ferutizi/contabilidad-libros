@@ -11,6 +11,11 @@ Aplicación para registros de libros contables. Libro diario, mayor, comprobacio
 
 ## Funcionalidades
 
+- Ingresar asientos con descripcion, fecha, cuentas y saldos
+- Agregar la cantidad de cuentas y saldos que se necesite
+- Eliminar asiento
+- Suma automatica de debe y haber
+
 ## Configuracion inicial
 
 Para correr el proyecto localmente:
